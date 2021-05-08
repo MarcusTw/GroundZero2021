@@ -10,6 +10,7 @@ class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _db;
 
+  static int index = 0;
   static String name = "John";
   static DateTime dob = DateTime(1998, 1, 2);
   static String hobbies = "Swimming, Jogging, Dancing";

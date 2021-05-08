@@ -115,12 +115,17 @@ class _HomeState extends State<Home> {
   ];
 
   static List<DropdownMenuItem> _dropDownTime(BuildContext context) {
-    return times.map((i) {
-      return DropdownMenuItem(
-          value: TimeOfDay(hour: i.hour, minute: i.minute),//TimeOfDay(hour: i.hour, minute: i.minute),
-          child: Text(i.format(context))
-      );
-    }).toList();
+    List<DropdownMenuItem> result = [];
+    for (int i = 0; i < times.length; i ++) {
+      TimeOfDay t = times[i];
+      for (int j = 0; j < 4; j++) {
+        result.add(DropdownMenuItem(
+            value: TimeOfDay(hour: t.hour, minute: (15 * j)),
+            child: Text(TimeOfDay(hour: t.hour, minute: (15*j)).format(context))
+        ));
+      }
+    }
+    return result;
   }
 
   void _create(BuildContext context) {
@@ -290,6 +295,7 @@ class _HomeState extends State<Home> {
     int end = int.parse(endTime.substring(10, 12));
     for (int i = start+1; i <= end; i++) {
       scheduleAlarm(date, i);
+      print('ALARM ADDED!!! ' + i.toString() + " hours");
     }
     _fetchEvents();
 
@@ -417,7 +423,9 @@ class _HomeState extends State<Home> {
     var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     String chosenExercise = exercises[new Random().nextInt(exercises.length - 1)];
-    await flutterLocalNotificationsPlugin.schedule(0, 'Time to exercise!', 'Do 10 ' + chosenExercise,
+    await flutterLocalNotificationsPlugin.schedule(
+        DatabaseHelper.index, 'Time for a break!', "Have a kitkat.",
         scheduledNotificationDateTime, platformChannelSpecifics);
+    DatabaseHelper.index++;
   }
 }

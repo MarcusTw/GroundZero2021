@@ -64,7 +64,7 @@ class Activity {
                 child: GestureDetector(
                     child: Text(name, style: Theme.of(context).primaryTextTheme.bodyText1),
                     onDoubleTap: () {
-                      showDialog(context: context, builder: (BuildContext context) => EventAdder(name));
+                      showDialog(context: context, builder: (BuildContext context) => BreakAdder(name));
                     }
                 ),
               ),

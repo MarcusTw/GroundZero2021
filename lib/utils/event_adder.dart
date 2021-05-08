@@ -1,26 +1,21 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_app/calendar_model.dart';
 import 'package:flutter_app/home.dart';
-import 'package:flutter_app/main.dart';
 import 'package:flutter_app/utils/database_helper.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-class EventAdder extends StatefulWidget {
+class BreakAdder extends StatefulWidget {
   final String eventName;
 
-  EventAdder(this.eventName);
+  BreakAdder(this.eventName);
 
   @override
-  _EventAdderState createState() => _EventAdderState();
+  _BreakAdderState createState() => _BreakAdderState();
 }
 
-class _EventAdderState extends State<EventAdder> {
-  static List<String> exercises = ['jumping jacks', 'high knees', 'high jumps', 'squats', 'counts of side stretches'];
+class _BreakAdderState extends State<BreakAdder> {
 
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime _selectedDay = DateTime.now();
@@ -63,12 +58,17 @@ class _EventAdderState extends State<EventAdder> {
   ];
 
   static List<DropdownMenuItem> _dropDownTime(BuildContext context) {
-    return times.map((i) {
-      return DropdownMenuItem(
-          value: TimeOfDay(hour: i.hour, minute: i.minute),//TimeOfDay(hour: i.hour, minute: i.minute),
-          child: Text(i.format(context))
-      );
-    }).toList();
+    List<DropdownMenuItem> result = [];
+    for (int i = 0; i < times.length; i ++) {
+      TimeOfDay t = times[i];
+      for (int j = 0; j < 4; j++) {
+        result.add(DropdownMenuItem(
+          value: TimeOfDay(hour: t.hour, minute: (15 * j)),
+          child: Text(TimeOfDay(hour: t.hour, minute: (15*j)).format(context))
+        ));
+      }
+    }
+    return result;
   }
 
 
@@ -82,12 +82,6 @@ class _EventAdderState extends State<EventAdder> {
     await databaseHelper.database;
     await databaseHelper.insert(CalendarItem.table, item);
     _selectedEvents.add(item);
-    //TODO: Schedule notification //Done...
-    int start = int.parse(startTime.substring(10, 12));
-    int end = int.parse(endTime.substring(10, 12));
-    for (int i = start+1; i <= end; i++) {
-      scheduleAlarm(date, i);
-    }
     _fetchEvents();
 
     Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) => Home()));
@@ -110,23 +104,6 @@ class _EventAdderState extends State<EventAdder> {
     );
     setState(() {});
   }
-
-
-
-  void scheduleAlarm(DateTime day, int time) async {
-    var scheduledNotificationDateTime = DateTime(day.year, day.month, day.day, time);
-
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails('alarm_notif', 'alarm_notif', 'Channel for Alarm notification');
-
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: false);
-
-    var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-
-    String chosenExercise = exercises[new Random().nextInt(exercises.length - 1)];
-    await flutterLocalNotificationsPlugin.schedule(0, 'Time to exercise!', 'Do 10 ' + chosenExercise,
-        scheduledNotificationDateTime, platformChannelSpecifics);
-  }
-
 
   @override
   Widget build(BuildContext context) {
@@ -194,10 +171,13 @@ class _EventAdderState extends State<EventAdder> {
                             _endTime = val;
                             _errorMsg = "";
                           });
-                          if (_endTime.hour <= _startTime.hour) {
+                          if ((_endTime.hour == _startTime.hour && _endTime.minute < _startTime.minute) ||
+                              (_endTime.hour < _startTime.hour)) {
                             setState(() {
-                              _endTime = TimeOfDay(hour: _startTime.hour + 1, minute: 00);
-                              _errorMsg = "Invalid start time, please choose again";
+                              _endTime = TimeOfDay(
+                                  hour: _startTime.hour + 1, minute: 00);
+                              _errorMsg =
+                              "Invalid start time, please choose again";
                             });
                           }
                         },

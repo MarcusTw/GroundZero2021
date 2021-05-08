@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/utils/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 class ProfileWidget extends StatefulWidget {
@@ -34,20 +33,24 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           backgroundImage: AssetImage('assets/images/user.png'),
         ),
         SizedBox(height: 5),
-        Text("Name: " + DatabaseHelper.name, style: Theme.of(context).primaryTextTheme.headline4,),
+        Text(DatabaseHelper.name, style: Theme.of(context).primaryTextTheme.headline4,),
         SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.all(5.0),
           child: Text("Age: " + DatabaseHelper.getAge().toString(), style: Theme.of(context).primaryTextTheme.bodyText1),
         ),
-        Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Text("D.O.B.: " + DateFormat('dd-MM-yyyy').format(DatabaseHelper.dob), style: Theme.of(context).primaryTextTheme.bodyText1),
-        ),
         SizedBox(height: 5),
         Padding(
           padding: const EdgeInsets.all(5.0),
-          child: Text("Hobbies: " + DatabaseHelper.hobbies, style: Theme.of(context).primaryTextTheme.bodyText1),
+          child: Text("Interests: " + DatabaseHelper.hobbies, style: Theme.of(context).primaryTextTheme.bodyText1),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text("DCF Bank", style: Theme.of(context).primaryTextTheme.bodyText1),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(5.0),
+          child: Text("Medical History: NIL", style: Theme.of(context).primaryTextTheme.bodyText1),
         ),
         Spacer(),
         ElevatedButton(

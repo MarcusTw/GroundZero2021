@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 
 class AboutUs extends StatelessWidget {
   final String aboutUs = 'Established in 2021, we aim to help employees achieve a better work-life balance!';
@@ -17,13 +18,14 @@ class AboutUs extends StatelessWidget {
             },
           ),
         ),
-        Padding(
+        Container(
+          height: 243,
+          width: 500,
           padding: const EdgeInsets.only(top: 10.0),
-          child: Image(
-            image: AssetImage('assets/images/aboutus.png'),
+          child: PhotoView(
+            imageProvider: AssetImage('assets/images/aboutus.png'),
           ),
         ),
-
         Padding(
           padding: const EdgeInsets.all(20),
           child: Text(

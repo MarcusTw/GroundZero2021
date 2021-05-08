@@ -5,13 +5,14 @@ import 'package:flutter_app/screens/daily_survey.dart';
 import 'package:flutter_app/screens/dashboard.dart';
 import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/screens/profile.dart';
 import 'package:flutter_app/utils/database_helper.dart';
+import 'package:google_fonts/google_fonts.dart';
 class MainDrawer extends StatefulWidget {
   @override
   _MainDrawerState createState() => _MainDrawerState();
 }
 
 class _MainDrawerState extends State<MainDrawer> {
-  final String appName = 'Kalm';
+  final String appName = 'Navigation';
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,13 @@ class _MainDrawerState extends State<MainDrawer> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.only(top: 30, left: 10),
-            child: Text(appName, style: Theme.of(context).primaryTextTheme.headline4,),
+            child: Text(
+              appName,
+              style: GoogleFonts.montserrat(
+                color: Colors.black45,
+                fontSize: 25,
+              ),
+            ),
           ),
         ),
         Container(
@@ -36,7 +43,6 @@ class _MainDrawerState extends State<MainDrawer> {
                   backgroundImage: AssetImage('assets/images/logo.png'),
                 ),
                 SizedBox(height:5.0),
-                Text(DatabaseHelper.name),
                 InkWell(
                     child: ListTile(
                         title: Text('Profile', style: Theme.of(context).primaryTextTheme.headline1)
