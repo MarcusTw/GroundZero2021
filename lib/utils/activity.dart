@@ -7,8 +7,9 @@ class Activity {
   String location;
   String imageUrl;
   double price;
+  int duration;
 
-  Activity(this.name, this.location, this.imageUrl, this.price);
+  Activity(this.name, this.location, this.imageUrl, this.price, this.duration);
 
   Widget zoomablePhoto(BuildContext context) {
     return Scaffold(
@@ -36,31 +37,51 @@ class Activity {
   }
 
   Widget activityTile(BuildContext context) {
-    return ListTile(
-      leading: Container(
-        height: 80,
-        width: 100.0,
-        child: GestureDetector(
-          child: Image(
-            image: NetworkImage(imageUrl),
-            fit: BoxFit.cover,
+    return Container(
+      height: 90,
+      child: Row(
+        children: [
+          Container(
+            height: 200,
+            width: 100.0,
+            padding: EdgeInsets.all(5.0),
+            child: GestureDetector(
+              child: Image(
+                image: NetworkImage(imageUrl),
+                fit: BoxFit.cover,
+              ),
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => zoomablePhoto(context)));
+              },
+            )
           ),
-          onTap: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => zoomablePhoto(context)));
-          },
-        )
-      ),
-      title: GestureDetector(
-        child: Text(name, style: Theme.of(context).primaryTextTheme.bodyText1),
-        onDoubleTap: () {
-          showDialog(context: context, builder: (BuildContext context) => EventAdder(name));
-        }
-      ),
-      subtitle: Text(location),
-      trailing: IconButton(
-        icon: Icon(Icons.gps_fixed_outlined),
-        onPressed: () {},
-      )
+          Column(
+            children: [
+              Container(
+                width: 260,
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 10, top: 7.0),
+                child: GestureDetector(
+                    child: Text(name, style: Theme.of(context).primaryTextTheme.bodyText1),
+                    onDoubleTap: () {
+                      showDialog(context: context, builder: (BuildContext context) => EventAdder(name));
+                    }
+                ),
+              ),
+              Container(
+                  alignment: Alignment.centerLeft ,child: Text(location)
+              ),
+              Container(
+                  alignment: Alignment.centerLeft, child: Text("Est. duration: " + duration.toString() + "mins",
+                  style: Theme.of(context).primaryTextTheme.bodyText2))
+            ]
+          ),
+          IconButton(
+            icon: Icon(Icons.gps_fixed_outlined),
+            onPressed: () {},
+          )
+          ]
+        ),
     );
   }
 }
