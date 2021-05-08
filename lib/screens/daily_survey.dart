@@ -8,7 +8,6 @@ class DailySurvey extends StatefulWidget {
 class _DailySurveyState extends State<DailySurvey> {
   var _stressLevel = 5.0;
   var _fatigueLevel = 5.0;
-  var _sedentaryHours = 5.0;
   @override
   Widget build(BuildContext context) {
     return Container(

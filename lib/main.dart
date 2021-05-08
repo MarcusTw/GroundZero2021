@@ -9,7 +9,7 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterL
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  var initializationSettingsAndroid = AndroidInitializationSettings('health');
+  var initializationSettingsAndroid = AndroidInitializationSettings('logo');
 
   var initializationSettingsIOS = IOSInitializationSettings(
     requestSoundPermission: true,

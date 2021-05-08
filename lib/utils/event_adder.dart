@@ -11,7 +11,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 class EventAdder extends StatefulWidget {
-  String eventName;
+  final String eventName;
 
   EventAdder(this.eventName);
 

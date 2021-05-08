@@ -58,7 +58,7 @@ class Activity {
           Column(
             children: [
               Container(
-                width: 260,
+                width: 250,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 10, top: 7.0),
                 child: GestureDetector(
