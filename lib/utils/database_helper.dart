@@ -18,13 +18,6 @@ class DatabaseHelper {
     return (DateTime.now().difference(dob).inDays / 365).floor();
   }
 
-  // String eventTable = 'events';
-  // String colId = 'id';
-  // String name = 'name';
-  // String date = 'date';
-  // String startTime = 'start_time';
-  // String endTime = 'end_time';
-
   DatabaseHelper._createInstance();
 
   factory DatabaseHelper() {

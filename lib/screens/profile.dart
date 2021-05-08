@@ -20,7 +20,7 @@ class _ProfileWidgetState extends State<ProfileWidget> {
       children: [
         Container(
           alignment: Alignment.topLeft,
-          padding: EdgeInsets.only(top : 10),
+          padding: EdgeInsets.only(top : 20),
           child: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: () {
