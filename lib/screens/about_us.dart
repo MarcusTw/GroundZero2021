@@ -19,7 +19,7 @@ class AboutUs extends StatelessWidget {
           ),
         ),
         Container(
-          height: 243,
+          height: 294,
           width: 500,
           padding: const EdgeInsets.only(top: 10.0),
           child: PhotoView(
