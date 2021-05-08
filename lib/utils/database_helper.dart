@@ -10,6 +10,14 @@ class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _db;
 
+  static String name = "";
+  static DateTime dob = DateTime(1998, 1, 2);
+  static String hobbies = "";
+
+  static int getAge() {
+    return (DateTime.now().difference(dob).inDays / 365).floor();
+  }
+
   // String eventTable = 'events';
   // String colId = 'id';
   // String name = 'name';

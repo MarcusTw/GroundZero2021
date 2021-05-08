@@ -1,6 +1,5 @@
-import 'package:android_alarm_manager/android_alarm_manager.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/calendar.dart';
+import 'package:flutter_app/home.dart';
 import 'package:flutter_app/theme.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
@@ -40,10 +39,8 @@ class MyApp extends StatelessWidget {
           builder: (context, ThemeNotifier notifier, child) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              theme: notifier.isDarkTheme
-                  ? dark
-                  : light,
-              home: Calendar(),
+              theme: light,
+              home: Home(),
             );
           }
           ),

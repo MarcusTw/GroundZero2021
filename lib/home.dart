@@ -4,22 +4,21 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_app/calendar_model.dart';
 import 'package:flutter_app/main.dart';
+import 'package:flutter_app/main_drawer.dart';
 import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/utils/database_helper.dart';
-import 'package:flutter_app/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class Calendar extends StatefulWidget {
+class Home extends StatefulWidget {
 
   @override
-  _CalendarState createState() => _CalendarState();
+  _HomeState createState() => _HomeState();
 }
 
-class _CalendarState extends State<Calendar> {
+class _HomeState extends State<Home> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime _selectedDay = DateTime.now();
 
@@ -286,7 +285,7 @@ class _CalendarState extends State<Calendar> {
     await databaseHelper.database;
     await databaseHelper.insert(CalendarItem.table, item);
     _selectedEvents.add(item);
-    //TODO: Schedule notification
+    //TODO: Schedule notification //Done...
     int start = int.parse(startTime.substring(10, 12));
     int end = int.parse(endTime.substring(10, 12));
     for (int i = start+1; i <= end; i++) {
@@ -312,9 +311,9 @@ class _CalendarState extends State<Calendar> {
         margin: EdgeInsets.fromLTRB(10, 0, 10, 10),
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.black,
             borderRadius: BorderRadius.circular(6),
-            gradient: LinearGradient(colors: [Colors.blue[600], Colors.blue[400]]),
+            gradient: LinearGradient(colors: [Color(0x388E6D), Color(0xFFDCE0)]),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Colors.black12,
@@ -326,14 +325,14 @@ class _CalendarState extends State<Calendar> {
         child: TableCalendar(
           calendarStyle: CalendarStyle(
             canEventMarkersOverflow: true,
-            markersColor: Colors.white,
-            weekdayStyle: TextStyle(color: Colors.white),
-            todayColor: Colors.white54,
-            todayStyle: TextStyle(color: Colors.redAccent, fontSize: 15, fontWeight: FontWeight.bold),
-            selectedColor: Colors.blue[900],
-            outsideWeekendStyle: TextStyle(color: Colors.white60),
-            outsideStyle: TextStyle(color: Colors.white60),
-            weekendStyle: TextStyle(color: Colors.white),
+            markersColor: Colors.black,
+            weekdayStyle: TextStyle(color: Colors.black),
+            todayColor: Colors.yellow[500],
+            todayStyle: TextStyle(color: Colors.black87, fontSize: 16),
+            selectedColor: Colors.yellow[600],
+            outsideWeekendStyle: TextStyle(color: Colors.grey[500]),
+            outsideStyle: TextStyle(color: Colors.grey[500]),
+            weekendStyle: TextStyle(color: Colors.black),
             renderDaysOfWeek: false,
           ),
           onDaySelected: _onDaySelected,
@@ -341,11 +340,11 @@ class _CalendarState extends State<Calendar> {
           events: _events,
 
           headerStyle: HeaderStyle(
-            leftChevronIcon: Icon(Icons.arrow_back_ios, size: 15, color: Colors.white),
-            rightChevronIcon: Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white),
+            leftChevronIcon: Icon(Icons.arrow_back_ios, size: 15, color: Colors.black54),
+            rightChevronIcon: Icon(Icons.arrow_forward_ios, size: 15, color: Colors.black54),
             titleTextStyle: GoogleFonts.montserrat(
-                color: Colors.white,
-                fontSize: 8)
+                color: Colors.black,
+                fontSize: 20)
             ,
             formatButtonDecoration: BoxDecoration(
               color: Colors.white60,
@@ -379,14 +378,11 @@ class _CalendarState extends State<Calendar> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Calendar", style: Theme.of(context).primaryTextTheme.headline1),
-        actions: [
-          Consumer<ThemeNotifier>(
-              builder: (context, notifier, child) => IconButton(icon: notifier.isDarkTheme
-                  ? FaIcon(FontAwesomeIcons.moon, size: 20, color: Colors.white,)
-                  : Icon(Icons.wb_sunny), onPressed: () => {notifier.toggleTheme()}))
-        ],
+        actions: [],
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: MainDrawer(),
+      ),
       backgroundColor: Theme.of(context).primaryColor,
       body:  ListView(
         //crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,11 +391,8 @@ class _CalendarState extends State<Calendar> {
             padding: EdgeInsets.all(15),
             child:
             Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-              
-            ],),
+              children: [],),
           ),
-
           calendar(),
           eventTitle(),
           Column(children:_eventWidgets),
@@ -407,7 +400,7 @@ class _CalendarState extends State<Calendar> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.redAccent,
+        backgroundColor: Colors.yellow[600],
         onPressed: () => _create(context),
         child: Icon(Icons.add, color: Colors.white,),
       ),
