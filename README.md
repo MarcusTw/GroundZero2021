@@ -4,7 +4,11 @@ Ground Zero 2021
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+This project is built for GroundZero2021. Our team is Oars.
+
+References:
+https://github.com/aphrx/flutter_calendar
+
 
 A few resources to get you started if this is your first Flutter project:
 
