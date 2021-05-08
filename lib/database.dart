@@ -24,15 +24,18 @@ abstract class DB {
 
   static FutureOr<void> onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE events (id INTEGER PRIMARY KEY NOT NULL, name STRING, date STRING, setCounter INTEGER)');
+      'CREATE TABLE events (id INTEGER PRIMARY KEY NOT NULL, name STRING, date STRING, setCounter INTEGER)');
   }
 
-  static Future<List<Map<String, dynamic>>> query(String table) async =>
-      await _db.query(table);
+  static Future<List<Map<String, dynamic>>> query(String table) async {
+    return await _db.query(table);
+  }
 
-  static Future<int> insert(String table, CalendarItem item) async =>
-      await _db.insert(table, item.toMap());
+  static Future<int> insert(String table, CalendarItem item) async {
+    return await _db.insert(table, item.toMap());
+  }
 
-  static Future<int> delete(String table, CalendarItem item) async =>
-      await _db.delete(table, where: 'id = ?', whereArgs: [item.id]);
+  static Future<int> delete(String table, CalendarItem item) async {
+    return await _db.delete(table, where: 'id = ?', whereArgs: [item.id]);
+  }
 }
