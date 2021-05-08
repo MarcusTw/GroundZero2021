@@ -10,9 +10,9 @@ class DatabaseHelper {
   static DatabaseHelper _databaseHelper;
   static Database _db;
 
-  static String name = "";
+  static String name = "John";
   static DateTime dob = DateTime(1998, 1, 2);
-  static String hobbies = "";
+  static String hobbies = "Swimming, Jogging, Dancing";
 
   static int getAge() {
     return (DateTime.now().difference(dob).inDays / 365).floor();

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/screens/about_us.dart';
+import 'package:flutter_app/screens/activities_page.dart';
 import 'package:flutter_app/screens/daily_survey.dart';
+import 'package:flutter_app/screens/dashboard.dart';
 import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/screens/profile.dart';
 import 'package:flutter_app/utils/database_helper.dart';
 class MainDrawer extends StatefulWidget {
@@ -8,6 +11,8 @@ class MainDrawer extends StatefulWidget {
 }
 
 class _MainDrawerState extends State<MainDrawer> {
+  final String appName = 'Kalm';
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -16,7 +21,7 @@ class _MainDrawerState extends State<MainDrawer> {
           alignment: Alignment.topLeft,
           child: Padding(
             padding: const EdgeInsets.only(top: 30, left: 10),
-            child: Text('Oars', style: Theme.of(context).primaryTextTheme.headline4,),
+            child: Text(appName, style: Theme.of(context).primaryTextTheme.headline4,),
           ),
         ),
         Container(
@@ -47,7 +52,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       title: Text('Dashboard', style: Theme.of(context).primaryTextTheme.headline1)
                   ),
                   onTap: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Scaffold(
+                        body: Dashboard()
+                    )));
                   },
                 ),
                 InkWell(
@@ -55,7 +62,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       title: Text('Activities', style: Theme.of(context).primaryTextTheme.headline1)
                   ),
                   onTap: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ActivitiesPage()));
                   },
                 ),
                 InkWell(
@@ -79,10 +86,12 @@ class _MainDrawerState extends State<MainDrawer> {
                 ),
                 InkWell(
                   child: ListTile(
-                      title: Text('5', style: Theme.of(context).primaryTextTheme.headline1)
+                      title: Text('About Us', style: Theme.of(context).primaryTextTheme.headline1)
                   ),
                   onTap: () {
-
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => Scaffold(
+                        body: AboutUs()
+                    )));
                   },
                 ),
               ],

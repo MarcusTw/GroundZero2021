@@ -122,6 +122,15 @@ class _ProfileWidgetState extends State<ProfileWidget> {
                                           showTitleActions: true,
                                           minTime: DateTime(1900),
                                           maxTime: DateTime.now(),
+                                          theme: DatePickerTheme(
+                                              headerColor: Colors.orange,
+                                              backgroundColor: Colors.blue,
+                                              itemStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18),
+                                              doneStyle:
+                                              TextStyle(color: Colors.white, fontSize: 16)),
                                           onChanged: (date) {
                                             setState(() {
                                               DatabaseHelper.dob = date;

@@ -12,7 +12,7 @@ class _DailySurveyState extends State<DailySurvey> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 350,
+      height: 270,
       child: Column(
         children: [
           Container(
@@ -20,7 +20,7 @@ class _DailySurveyState extends State<DailySurvey> {
               child: Column(
                   children: [
                     Text('On a scale of 1 to 10, how stressed are you?'),
-                    Text('(10 being most stressed, 1 being least stressed)')
+                    Text('(10 being most stressed, 1 being relaxed)')
                   ]
               )
           ),
@@ -41,7 +41,7 @@ class _DailySurveyState extends State<DailySurvey> {
             child: Column(
               children: [
                 Text('On a scale of 1 to 10, how tired are you?'),
-                Text('(10 being very tired, 1 being not tired at all)')
+                Text('(10 being very tired, 1 being fresh)')
               ]
             )
           ),
@@ -56,26 +56,6 @@ class _DailySurveyState extends State<DailySurvey> {
               max: 10,
               divisions: 9,
               label: "$_fatigueLevel"
-          ),
-          Container(
-              padding: EdgeInsets.all(5.0),
-              child: Column(
-                  children: [
-                    Text('How long did you remained sedentary?')
-                  ]
-              )
-          ),
-          Slider.adaptive(
-              value: _sedentaryHours,
-              onChanged: (hours) {
-                setState(() {
-                  _sedentaryHours = hours;
-                });
-              },
-              min: 0,
-              max: 24,
-              divisions: 24,
-              label: "$_sedentaryHours"
           ),
           Container(
             child: Row(

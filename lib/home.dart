@@ -61,13 +61,13 @@ class _HomeState extends State<Home> {
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children:[
-                Text(d.name,
-                  style: Theme.of(context).primaryTextTheme.bodyText1
+                Text(d.name.length > 20 ? d.name.substring(0, 20) + "..." : d.name,
+                    style: Theme.of(context).primaryTextTheme.bodyText1
                 ),
                 Center(
                   child: Text(
-                    d.startTime.substring(10,15) + " - " + d.endTime.substring(10, 15),
-                    style: Theme.of(context).primaryTextTheme.bodyText1
+                      d.startTime.substring(10,15) + " - " + d.endTime.substring(10, 15),
+                      style: Theme.of(context).primaryTextTheme.bodyText1
                   ),
                 ),
                 IconButton(
@@ -113,7 +113,7 @@ class _HomeState extends State<Home> {
     TimeOfDay(hour: 04, minute: 00),
     TimeOfDay(hour: 05, minute: 00),
   ];
-  
+
   static List<DropdownMenuItem> _dropDownTime(BuildContext context) {
     return times.map((i) {
       return DropdownMenuItem(
@@ -181,49 +181,49 @@ class _HomeState extends State<Home> {
                   Container(
                       padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
                       child: DropdownButton(
-                        hint: Text("Select Start Time: "),
-                        icon: Icon(Icons.arrow_drop_down_circle),
-                        iconSize: 36,
-                        isExpanded: true,
-                        value: _startTime,
-                        onChanged: (val) {
-                          setState(() {
-                            _startTime = val;
-                          });
-                        },
-                        items: _dropDownTime(context)
-                    )
+                          hint: Text("Select Start Time: "),
+                          icon: Icon(Icons.arrow_drop_down_circle),
+                          iconSize: 36,
+                          isExpanded: true,
+                          value: _startTime,
+                          onChanged: (val) {
+                            setState(() {
+                              _startTime = val;
+                            });
+                          },
+                          items: _dropDownTime(context)
+                      )
                   ),
                   Container(
                       padding: EdgeInsets.fromLTRB(20, 2, 20, 2),
                       child: DropdownButton(
-                        hint: Text("Select End Time: "),
-                        icon: Icon(Icons.arrow_drop_down_circle),
-                        iconSize: 36,
-                        isExpanded: true,
-                        value: _endTime,
-                        onChanged: (val) {
-                          setState(() {
-                            _endTime = val;
-                            _errorMsg = "";
-                          });
-                          if (_endTime.hour <= _startTime.hour) {
+                          hint: Text("Select End Time: "),
+                          icon: Icon(Icons.arrow_drop_down_circle),
+                          iconSize: 36,
+                          isExpanded: true,
+                          value: _endTime,
+                          onChanged: (val) {
                             setState(() {
-                              _endTime = TimeOfDay(hour: _startTime.hour + 1, minute: 00);
-                              _errorMsg = "Invalid start time, please choose again";
+                              _endTime = val;
+                              _errorMsg = "";
                             });
-                          }
-                        },
-                        items: _dropDownTime(context))
+                            if (_endTime.hour <= _startTime.hour) {
+                              setState(() {
+                                _endTime = TimeOfDay(hour: _startTime.hour + 1, minute: 00);
+                                _errorMsg = "Invalid start time, please choose again";
+                              });
+                            }
+                          },
+                          items: _dropDownTime(context))
                   ),
                   Container(
                     // padding: EdgeInsets.all(5),
-                    child: Text(
-                      _errorMsg,
-                      style: GoogleFonts.montserrat(
+                      child: Text(
+                        _errorMsg,
+                        style: GoogleFonts.montserrat(
                           color: Colors.red,
                           fontSize: 10,
-                      ),)
+                        ),)
                   ),
                   Row(
                       mainAxisSize: MainAxisSize.min,
@@ -277,10 +277,10 @@ class _HomeState extends State<Home> {
 
   void _addEvent(DateTime date, String event, String startTime, String endTime) async{
     CalendarItem item = CalendarItem(
-      date: _selectedDay.toString(),
-      name: event,
-      startTime: startTime,
-      endTime: endTime
+        date: _selectedDay.toString(),
+        name: event,
+        startTime: startTime,
+        endTime: endTime
     );
     await databaseHelper.database;
     await databaseHelper.insert(CalendarItem.table, item);
@@ -295,7 +295,7 @@ class _HomeState extends State<Home> {
 
     Navigator.pop(context);
   }
-  
+
   void _deleteEvent(String s, String startTime, String endTime){
     List<CalendarItem> d = _data.where(
             (element) => (element.name == s && element.startTime == startTime && element.endTime == endTime)).toList();
@@ -333,12 +333,11 @@ class _HomeState extends State<Home> {
             outsideWeekendStyle: TextStyle(color: Colors.grey[500]),
             outsideStyle: TextStyle(color: Colors.grey[500]),
             weekendStyle: TextStyle(color: Colors.black),
-            renderDaysOfWeek: false,
+            renderDaysOfWeek: true,
           ),
           onDaySelected: _onDaySelected,
           calendarController: _calendarController,
           events: _events,
-
           headerStyle: HeaderStyle(
             leftChevronIcon: Icon(Icons.arrow_back_ios, size: 15, color: Colors.black54),
             rightChevronIcon: Icon(Icons.arrow_forward_ios, size: 15, color: Colors.black54),
@@ -355,7 +354,6 @@ class _HomeState extends State<Home> {
                 fontSize: 13,
                 fontWeight: FontWeight.bold),
           ),
-
         )
     );
   }
@@ -375,6 +373,7 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Calendar", style: Theme.of(context).primaryTextTheme.headline1),
