@@ -1,7 +1,9 @@
 import 'dart:core';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/calendar_model.dart';
+import 'package:flutter_app/main.dart';
 import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/utils/database_helper.dart';
 import 'package:flutter_app/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -9,6 +11,7 @@ import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class Calendar extends StatefulWidget {
 
@@ -20,8 +23,10 @@ class _CalendarState extends State<Calendar> {
   DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime _selectedDay = DateTime.now();
 
+  static List<String> exercises = ['jumping jacks', 'high knees', 'high jumps', 'squats', 'counts of side stretches'];
+
   CalendarController _calendarController;
-  Map<DateTime, List<dynamic>> _events = {};
+  Map<DateTime, List<CalendarItem>> _events = {};
   List<CalendarItem> _data = [];
 
   List<dynamic> _selectedEvents = [];
@@ -31,6 +36,7 @@ class _CalendarState extends State<Calendar> {
   TimeOfDay _endTime = TimeOfDay(hour: 09, minute: 00);
   String _errorMsg = "";
   String _name = "";
+
 
   void initState() {
     super.initState();
@@ -75,7 +81,7 @@ class _CalendarState extends State<Calendar> {
               ]) ),
     );  }
 
-  void _onDaySelected(DateTime day, List events, List list) {
+  void _onDaySelected(DateTime day, List<dynamic> events, List list) {
     setState(() {
       _selectedDay = day;
       _selectedEvents = events;
@@ -230,7 +236,7 @@ class _CalendarState extends State<Calendar> {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold)),
                           onPressed: () => {
-                            _addEvent(_name, _startTime.toString(), _endTime.toString())
+                            _addEvent(_selectedDay, _name, _startTime.toString(), _endTime.toString())
                           },
                         ),
                         TextButton(
@@ -260,17 +266,17 @@ class _CalendarState extends State<Calendar> {
     _data.forEach((element) {
       DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.parse(element.date.toString())));
       if(_events.containsKey(formattedDate)){
-        _events[formattedDate].add(element.name.toString());
+        _events[formattedDate].add(element);
       }
       else{
-        _events[formattedDate] = [element.name.toString()];
+        _events[formattedDate] = [element];
       }
     }
     );
     setState(() {});
   }
 
-  void _addEvent(String event, String startTime, String endTime) async{
+  void _addEvent(DateTime date, String event, String startTime, String endTime) async{
     CalendarItem item = CalendarItem(
       date: _selectedDay.toString(),
       name: event,
@@ -280,6 +286,12 @@ class _CalendarState extends State<Calendar> {
     await databaseHelper.database;
     await databaseHelper.insert(CalendarItem.table, item);
     _selectedEvents.add(item);
+    //TODO: Schedule notification
+    int start = int.parse(startTime.substring(10, 12));
+    int end = int.parse(endTime.substring(10, 12));
+    for (int i = start+1; i <= end; i++) {
+      scheduleAlarm(date, i);
+    }
     _fetchEvents();
 
     Navigator.pop(context);
@@ -316,7 +328,6 @@ class _CalendarState extends State<Calendar> {
             canEventMarkersOverflow: true,
             markersColor: Colors.white,
             weekdayStyle: TextStyle(color: Colors.white),
-
             todayColor: Colors.white54,
             todayStyle: TextStyle(color: Colors.redAccent, fontSize: 15, fontWeight: FontWeight.bold),
             selectedColor: Colors.blue[900],
@@ -334,7 +345,7 @@ class _CalendarState extends State<Calendar> {
             rightChevronIcon: Icon(Icons.arrow_forward_ios, size: 15, color: Colors.white),
             titleTextStyle: GoogleFonts.montserrat(
                 color: Colors.white,
-                fontSize: 16)
+                fontSize: 8)
             ,
             formatButtonDecoration: BoxDecoration(
               color: Colors.white60,
@@ -402,5 +413,19 @@ class _CalendarState extends State<Calendar> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
+  }
+
+  void scheduleAlarm(DateTime day, int time) async {
+    var scheduledNotificationDateTime = DateTime(day.year, day.month, day.day, time);
+
+    var androidPlatformChannelSpecifics = AndroidNotificationDetails('alarm_notif', 'alarm_notif', 'Channel for Alarm notification');
+
+    var iOSPlatformChannelSpecifics = IOSNotificationDetails(presentAlert: true, presentBadge: true, presentSound: false);
+
+    var platformChannelSpecifics = NotificationDetails(androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    String chosenExercise = exercises[new Random().nextInt(exercises.length - 1)];
+    await flutterLocalNotificationsPlugin.schedule(0, 'Time to exercise!', 'Do 10 ' + chosenExercise,
+        scheduledNotificationDateTime, platformChannelSpecifics);
   }
 }
