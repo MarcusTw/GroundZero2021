@@ -2,7 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_app/calendar_model.dart';
-import 'package:flutter_app/database.dart';
+import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/utils/database_helper.dart';
 import 'package:flutter_app/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -17,7 +17,7 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
-
+  DatabaseHelper databaseHelper = DatabaseHelper();
   DateTime _selectedDay = DateTime.now();
 
   CalendarController _calendarController;
@@ -34,7 +34,7 @@ class _CalendarState extends State<Calendar> {
 
   void initState() {
     super.initState();
-    DB.init().then((value) => _fetchEvents());
+    _fetchEvents();
     _calendarController = CalendarController();
   }
 
@@ -43,7 +43,7 @@ class _CalendarState extends State<Calendar> {
     super.dispose();
   }
 
-  Widget events(var d){
+  Widget events(CalendarItem d){
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       child: Container(
@@ -55,9 +55,23 @@ class _CalendarState extends State<Calendar> {
               )),
           child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children:[Text(d,
-                  style: Theme.of(context).primaryTextTheme.bodyText1),
-                IconButton(icon: FaIcon(FontAwesomeIcons.trashAlt, color: Colors.redAccent, size: 15,), onPressed: ()=> _deleteEvent(d))
+              children:[
+                Text(d.name,
+                  style: Theme.of(context).primaryTextTheme.bodyText1
+                ),
+                Center(
+                  child: Text(
+                    d.startTime.substring(10,15) + " - " + d.endTime.substring(10, 15),
+                    style: Theme.of(context).primaryTextTheme.bodyText1
+                  ),
+                ),
+                IconButton(
+                    icon: FaIcon(
+                      FontAwesomeIcons.trashAlt,
+                      color: Colors.redAccent, size: 15,
+                    ),
+                    onPressed: ()=> _deleteEvent(d.name, d.startTime, d.endTime)
+                )
               ]) ),
     );  }
 
@@ -216,7 +230,7 @@ class _CalendarState extends State<Calendar> {
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold)),
                           onPressed: () => {
-                            _addEvent(_name)
+                            _addEvent(_name, _startTime.toString(), _endTime.toString())
                           },
                         ),
                         TextButton(
@@ -240,7 +254,8 @@ class _CalendarState extends State<Calendar> {
 
   void _fetchEvents() async{
     _events = {};
-    List<Map<String, dynamic>> _results = await DB.query(CalendarItem.table);
+    await databaseHelper.database;
+    List<Map<String, dynamic>> _results = await databaseHelper.query(CalendarItem.table);
     _data = _results.map((item) => CalendarItem.fromMap(item)).toList();
     _data.forEach((element) {
       DateTime formattedDate = DateTime.parse(DateFormat('yyyy-MM-dd').format(DateTime.parse(element.date.toString())));
@@ -255,25 +270,29 @@ class _CalendarState extends State<Calendar> {
     setState(() {});
   }
 
-  void _addEvent(String event) async{
+  void _addEvent(String event, String startTime, String endTime) async{
     CalendarItem item = CalendarItem(
-        date: _selectedDay.toString(),
-        name: event
+      date: _selectedDay.toString(),
+      name: event,
+      startTime: startTime,
+      endTime: endTime
     );
-    await DB.insert(CalendarItem.table, item);
-    _selectedEvents.add(event);
+    await databaseHelper.database;
+    await databaseHelper.insert(CalendarItem.table, item);
+    _selectedEvents.add(item);
     _fetchEvents();
 
     Navigator.pop(context);
   }
   
-  void _deleteEvent(String s){
-    List<CalendarItem> d = _data.where((element) => element.name == s).toList();
-    if(d.length == 1){
-      DB.delete(CalendarItem.table, d[0]);
-      _selectedEvents.removeWhere((e) => e == s);
-      _fetchEvents();
+  void _deleteEvent(String s, String startTime, String endTime){
+    List<CalendarItem> d = _data.where(
+            (element) => (element.name == s && element.startTime == startTime && element.endTime == endTime)).toList();
+    for (int i = 0; i < d.length; i++) {
+      databaseHelper.delete(CalendarItem.table, d[i]);
+      _selectedEvents.removeWhere((e) => e.name == s && e.startTime == startTime && e.endTime == endTime);
     }
+    _fetchEvents();
   }
 
   Widget calendar(){
@@ -283,7 +302,7 @@ class _CalendarState extends State<Calendar> {
         decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(6),
-            gradient: LinearGradient(colors: [Colors.red[600], Colors.red[400]]),
+            gradient: LinearGradient(colors: [Colors.blue[600], Colors.blue[400]]),
             boxShadow: <BoxShadow>[
               BoxShadow(
                   color: Colors.black12,
@@ -300,7 +319,7 @@ class _CalendarState extends State<Calendar> {
 
             todayColor: Colors.white54,
             todayStyle: TextStyle(color: Colors.redAccent, fontSize: 15, fontWeight: FontWeight.bold),
-            selectedColor: Colors.red[900],
+            selectedColor: Colors.blue[900],
             outsideWeekendStyle: TextStyle(color: Colors.white60),
             outsideStyle: TextStyle(color: Colors.white60),
             weekendStyle: TextStyle(color: Colors.white),
@@ -322,7 +341,7 @@ class _CalendarState extends State<Calendar> {
               borderRadius: BorderRadius.circular(20),
             ),
             formatButtonTextStyle: GoogleFonts.montserrat(
-                color: Colors.red,
+                color: Colors.blueGrey,
                 fontSize: 13,
                 fontWeight: FontWeight.bold),
           ),
