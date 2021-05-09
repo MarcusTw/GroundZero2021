@@ -3,7 +3,7 @@ import 'package:flutter_app/screens/about_us.dart';
 import 'package:flutter_app/screens/activities_page.dart';
 import 'package:flutter_app/screens/daily_survey.dart';
 import 'package:flutter_app/screens/dashboard.dart';
-import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/screens/profile.dart';
+import 'package:flutter_app/screens/profile.dart';
 import 'package:flutter_app/utils/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 class MainDrawer extends StatefulWidget {
