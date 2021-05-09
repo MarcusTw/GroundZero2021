@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/calendar_model.dart';
 import 'package:flutter_app/main.dart';
 import 'package:flutter_app/main_drawer.dart';
-import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/utils/database_helper.dart';
+import 'package:flutter_app/utils/database_helper.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
