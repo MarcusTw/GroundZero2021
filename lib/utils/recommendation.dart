@@ -1,4 +1,4 @@
-import 'file:///C:/Users/Marcus/Desktop/1GrZr/flutter_app/lib/activity.dart';
+import 'package:flutter_app/activity.dart';
 
 class Recommendation {
   //Machine Learning - to gather activities for user
