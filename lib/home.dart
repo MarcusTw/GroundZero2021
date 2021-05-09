@@ -212,7 +212,8 @@ class _HomeState extends State<Home> {
                               _endTime = val;
                               _errorMsg = "";
                             });
-                            if (_endTime.hour <= _startTime.hour) {
+                            if ((_endTime.hour == _startTime.hour && _endTime.minute < _startTime.minute) ||
+                                (_endTime.hour < _startTime.hour)) {
                               setState(() {
                                 _endTime = TimeOfDay(hour: _startTime.hour + 1, minute: 00);
                                 _errorMsg = "Invalid start time, please choose again";
